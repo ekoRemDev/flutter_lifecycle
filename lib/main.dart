@@ -7,11 +7,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'LifeCycle',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'LifeCycle'),
     );
   }
 }
@@ -25,8 +25,12 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
+  final GlobalKey editableTextState = GlobalKey();
+  final GlobalKey editableTextState2 = GlobalKey();
+  final GlobalKey appBarKey = GlobalKey();
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -44,32 +48,34 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver{
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-       print("............................ ${state} ");
+    print("............................ $state ");
   }
-
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
+        key: appBarKey,
+        backgroundColor: Colors.red,
         title: Text(widget.title),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'LifeCycle Example',
+            TextField(
+              key: editableTextState,
+              onTap: () {
+                _scaffoldKey.currentState.showSnackBar(
+                    new SnackBar(content: Text("Search - Snack Bar ")));
+              },
+              decoration: InputDecoration(
+                  border: InputBorder.none, hintText: 'Enter a search term'),
             ),
-
           ],
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
-
-
-
-
 }
